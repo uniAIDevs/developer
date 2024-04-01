@@ -252,3 +252,16 @@ things to try/would accept open issue discussions and PRs:
   - but it doesnt work because anthropic doesnt follow instructions to generate file code very well.
 - **make agents that autonomously run this code in a loop/watch the prompt file** and regenerate code each time, on a new git branch
   - the code could be generated on 5 simultaneous git branches and checking their output would just involve switching git branches
+
+## Configuring API Providers
+
+To configure the application to use either OpenAI or HuggingFace's API, you need to set the `API_PROVIDER` environment variable. This variable can be set to either `OpenAI` or `HuggingFace` depending on which service you wish to use.
+
+### OpenAI
+To use OpenAI's API, set `API_PROVIDER` to `OpenAI` and also set the `OPENAI_API_KEY` environment variable with your OpenAI API key.
+
+### HuggingFace
+To use HuggingFace's API, set `API_PROVIDER` to `HuggingFace` and set the `HUGGINGFACE_API_KEY` environment variable with your HuggingFace API key.
+
+### api_client.py Module
+The `api_client.py` module is a new addition that abstracts the API calls to either OpenAI or HuggingFace based on the `API_PROVIDER` setting. This module allows for easy switching between API providers without needing to change the application code.
