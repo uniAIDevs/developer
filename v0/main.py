@@ -3,6 +3,7 @@ import modal
 import ast
 from utils import clean_dir
 from constants import DEFAULT_DIR, DEFAULT_MODEL, DEFAULT_MAX_TOKENS
+from api_client import APIClient
 
 stub = modal.Stub("smol-developer-v1") # yes we are recommending using Modal by default, as it helps with deployment. see readme for why.
 openai_image = modal.Image.debian_slim().pip_install("openai", "tiktoken")
@@ -29,8 +30,8 @@ def generate_response(model, system_prompt, user_prompt, *args):
         print("\033[37m" + str(len(encoding.encode(prompt))) + " tokens\033[0m" + " in prompt: " + "\033[92m" + prompt[:50] + "\033[0m" + ("..." if len(prompt) > 50 else ""))
         
 
-    # Set up your OpenAI API credentials
-    openai.api_key = os.environ["OPENAI_API_KEY"]
+    # Initialize APIClient
+    api_client = APIClient()
 
     messages = []
     messages.append({"role": "system", "content": system_prompt})
@@ -52,9 +53,8 @@ def generate_response(model, system_prompt, user_prompt, *args):
     }
 
     # Send the API request
-    response = openai.ChatCompletion.create(**params)
-
-    # Get the reply from the API response
+    reply = api_client.generate_response(model, system_prompt, user_prompt, *args)
+    return reply
     reply = response.choices[0]["message"]["content"]
     return reply
 
